@@ -2,13 +2,20 @@ import express from "express";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 
+
 const app = express();
+app.use(express.json());
+
 
 app.post("/api/v1/sigin", (req,res) =>{
-
+    const username = req.body().username;
+    const password = req.body().password;
 })
 
-app.post("/api/v1/signup", (req,res) =>{
+app.post("/api/v1/signup", async (req,res) =>{
+    const username = req.body().username;
+    const password = req.body().password;
+    //zod validation
 
 })
 
@@ -27,3 +34,5 @@ app.get("api/brain/:shareLink", (req,res) =>{
 app.post("api/brain/:shareLink", (req,res) =>{
 
 })
+
+app.listen(3000);
