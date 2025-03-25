@@ -6,7 +6,7 @@ dotenv.config();
 const envSchema = z.object({
   JWT_SECRET: z.string().min(8),
   PORT: z.string().default('3000'),
-  MONGODB_URI: z.string().url(),
+  MONGODB_URI: z.string(),
 //   NODE_ENV: z.enum(['development', 'production', 'test']).default('development')
 });
 
