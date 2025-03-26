@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { z } from "zod"
 import { signupSchema,signinSchema } from "./validations";
-
+import { config } from "dotenv";
+import jwt from "jsonwebtoken";
 
 // export const validate = (schema: z.ZodSchema) => (req: Request, res:Response, next: NextFunction) => {
 //     try {
@@ -19,6 +20,8 @@ import { signupSchema,signinSchema } from "./validations";
 //   };
 
 export const userMiddleware = (req : Request, res : Response, next : NextFunction) =>{
+    const header = req.headers["authorization"];
 
+    
 
 }

@@ -1,9 +1,10 @@
-import express, { Request, Response, NextFunction } from "express";
+import express, { Request, Response, NextFunction, RequestHandler } from "express";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import { UserModel } from "./db";
 import { config } from "./config";
 import { z } from "zod";
+// import { JWT_PASSWORD } from "./config"
 import cors from "cors"
 
 import { signupSchema } from "./validations";
@@ -42,13 +43,27 @@ const validate = (schema: z.ZodSchema) => (req: Request, res: Response, next: Ne
   })
 
 
-  app.post("/api/v1/signin", async (req: Request, res: Response) => {
+  app.post("/api/v1/signin", (async (req: Request, res: Response)  => {
+
+    const { username, password } = req.body;
+    const existingUser = await UserModel.findOne({ username, password });
+
+    if(!existingUser){
+      return res.json({
+        msg : "Incorrect Credentials"
+      })
+    }
+
+    const token = jwt.sign({
+      id : existingUser._id
+    }, config.JWT_PASSWORD);
+
+     res.json({
+      token
+    })
 
 
-
-
-
-  })
+  }) as RequestHandler)
 
   app.post("/api/v1/content", (req, res) => {
 
