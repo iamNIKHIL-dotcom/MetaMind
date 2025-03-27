@@ -48,25 +48,28 @@ const validate = (schema: z.ZodSchema) => (req: Request, res: Response, next: Ne
     const { username, password } = req.body;
     const existingUser = await UserModel.findOne({ username, password });
 
-    if(!existingUser){
+    if(existingUser){
+     
+      const token = jwt.sign({
+        id : existingUser._id
+      }, config.JWT_PASSWORD);
+  
+       res.json({
+        token
+      })
+    }
+
+    else{
       return res.json({
         msg : "Incorrect Credentials"
       })
     }
 
-    const token = jwt.sign({
-      id : existingUser._id
-    }, config.JWT_PASSWORD);
-
-     res.json({
-      token
-    })
-
 
   }) as RequestHandler)
 
   app.post("/api/v1/content", (req, res) => {
-
+    
   })
   app.get("/api/v1/content", (req, res) => {
 
