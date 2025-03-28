@@ -1,13 +1,14 @@
 import express, { Request, Response, NextFunction, RequestHandler } from "express";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
-import { UserModel } from "./db";
+import { UserModel, ContentModel } from "./db";
 import { config } from "./config";
 import { z } from "zod";
 // import { JWT_PASSWORD } from "./config"
 import cors from "cors"
 
 import { signupSchema } from "./validations";
+import { userMiddleware } from "./middleware";
 
 const app = express();
 app.use(express.json());
@@ -68,10 +69,30 @@ const validate = (schema: z.ZodSchema) => (req: Request, res: Response, next: Ne
 
   }) as RequestHandler)
 
-  app.post("/api/v1/content", (req, res) => {
+  app.post("/api/v1/content",userMiddleware,async (req, res) => {
     const { link, type, title, tags } = req.body;
 
-    
+
+    try {
+      await ContentModel.create({
+          link,
+          type,
+          title,
+          //@ts-ignore
+          userId: req.userId,
+          tags
+      });
+
+      res.json({ message: "Content added" });
+      
+  } catch (error) {
+      res.status(500).json({ 
+          message: "Error adding content",
+          //@ts-ignore
+          error: error.message 
+      });
+  }
+
   })
   app.get("/api/v1/content", (req, res) => {
 
