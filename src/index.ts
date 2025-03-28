@@ -69,6 +69,8 @@ const validate = (schema: z.ZodSchema) => (req: Request, res: Response, next: Ne
   }) as RequestHandler)
 
   app.post("/api/v1/content", (req, res) => {
+    const { link, type, title, tags } = req.body;
+
     
   })
   app.get("/api/v1/content", (req, res) => {
